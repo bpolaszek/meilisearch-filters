@@ -1,0 +1,54 @@
+{
+  "name": "meilisearch-filters",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Expression builder for Meilisearch filters.",
+  "author": "Beno!t POLASZEK",
+  "license": "MIT",
+  "homepage": "https://github.com/bpolaszek/meilisearch-filters",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bpolaszek/meilisearch-filters.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bpolaszek/meilisearch-filters/issues"
+  },
+  "keywords": [
+    "meilisearch",
+    "meili",
+    "search",
+    "filter",
+    "filters",
+    "builder"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest --run",
+    "lint": "prettier --check \"(src|tests)/**\" --ignore-unknown",
+    "format": "prettier -w \"(src|tests)/**\" --ignore-unknown"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.2",
+    "match-operator": "^0.2.1",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.3.1",
+    "vitest": "^0.33.0"
+  },
+  "main": "./dist/meilisearch-filters.umd.cjs",
+  "module": "./dist/meilisearch-filters.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/meilisearch-filters.js",
+      "require": "./dist/meilisearch-filters.umd.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ]
+}
