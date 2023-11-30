@@ -11,16 +11,16 @@ Examples:
 ```js
 import {field} from 'meilisearch-filters'
 
-`${field('cat').equals("Berlioz")}` // cat = Berlioz
+`${field('cat').equals("Berlioz")}` // cat = 'Berlioz'
 `${field('cat').notEquals("O'Malley")}` // cat != 'O\\'Malley'
-`${field('age').isGreaterThan(5)}` // age > 5
-`${field('age').isGreaterThan(5, true)}` // age >= 5
-`${field('age').isNotGreaterThan(5)}` // age <= 5
-`${field('age').isNotGreaterThan(5, true)}` // age < 5
-`${field('age').isLowerThan(10)}` // age < 10
-`${field('age').isLowerThan(10, true)}` // age <= 10
-`${field('age').isNotLowerThan(10)}` // age >= 10
-`${field('age').isNotLowerThan(10, true)}` // age > 10
+`${field('age').isGreaterThan(5)}` // age > '5'
+`${field('age').isGreaterThan(5, true)}` // age >= '5'
+`${field('age').isNotGreaterThan(5)}` // age <= '5'
+`${field('age').isNotGreaterThan(5, true)}` // age < '5'
+`${field('age').isLowerThan(10)}` // age < '10'
+`${field('age').isLowerThan(10, true)}` // age <= '10'
+`${field('age').isNotLowerThan(10)}` // age >= '10'
+`${field('age').isNotLowerThan(10, true)}` // age > '10'
 ```
 
 ### Between Filter
@@ -28,10 +28,10 @@ import {field} from 'meilisearch-filters'
 ```js
 import {field} from 'meilisearch-filters'
 
-`${field('age').isBetween(5, 10)}` // age 5 TO 10
-`${field('age').isNotBetween(5, 10)}` // NOT age 5 TO 10
-`${field('age').isBetween(5, 10, false)}` // age > 5 AND age < 10
-`${field('age').isNotBetween(5, 10, false)}` // NOT (age > 5 AND age < 10)
+`${field('age').isBetween(5, 10)}` // age '5' TO '10'
+`${field('age').isNotBetween(5, 10)}` // NOT age '5' TO '10'
+`${field('age').isBetween(5, 10, false)}` // age > '5' AND age < '10'
+`${field('age').isNotBetween(5, 10, false)}` // NOT (age > '5' AND age < '10')
 ```
 
 ### Exists Filter
@@ -67,8 +67,8 @@ import {field} from 'meilisearch-filters'
 import {field} from 'meilisearch-filters'
 
 const cat = field('cat')
-`${cat.isIn(['Berlioz', "O'Malley"])}` // cat IN [Berlioz, 'O\\'Malley']
-`${cat.isNotIn(['Berlioz', "O'Malley"])}` // cat NOT IN [Berlioz, 'O\\'Malley']
+`${cat.isIn(['Berlioz', "O'Malley"])}` // cat IN ['Berlioz', 'O\\'Malley']
+`${cat.isNotIn(['Berlioz', "O'Malley"])}` // cat NOT IN ['Berlioz', 'O\\'Malley']
 ```
 
 ### Geographic filters
@@ -95,11 +95,11 @@ import {field} from 'meilisearch-filters'
 const cat = field('cat')
 const color = field('color')
 const age = field('age')
-`${cat.equals("Berlioz").and(age.between(5, 10))}` // cat = Berlioz AND age 5 TO 10
-`${cat.equals("Berlioz").or(age.between(5, 10))}` // cat = Berlioz OR age 5 TO 10
+`${cat.equals("Berlioz").and(age.between(5, 10))}` // cat = 'Berlioz' AND age '5' TO '10'
+`${cat.equals("Berlioz").or(age.between(5, 10))}` // cat = 'Berlioz' OR age '5' TO '10'
 
 // Automatic grouping
-`${color.equals('ginger').or(cat.equals("Berlioz").and(age.between(5, 10)))}` // color = ginger OR (cat = Berlioz AND age 5 TO 10)
+`${color.equals('ginger').or(cat.equals("Berlioz").and(age.between(5, 10)))}` // color = 'ginger' OR (cat = 'Berlioz' AND age '5' TO '10')
 ```
 
 ### NOT filter
@@ -108,7 +108,7 @@ const age = field('age')
 import {field, not} from 'meilisearch-filters'
 
 const color = field('ginger')
-`${not(color.equals('ginger'))}` // NOT color = ginger 
+`${not(color.equals('ginger'))}` // NOT color = 'ginger' 
 ```
 
 ### Adding parentheses
@@ -117,7 +117,7 @@ const color = field('ginger')
 import {field, group} from 'meilisearch-filters'
 
 const color = field('ginger')
-`${group(color.equals('ginger'))}` // (color = ginger) 
+`${group(color.equals('ginger'))}` // (color = 'ginger') 
 ```
 
 # Installation

@@ -4,84 +4,84 @@ import {describe, it, expect} from 'vitest'
 describe('EQUALS filter', () => {
   it('stringifies the filter', () => {
     const expression = field('cat').equals('Berlioz')
-    expect(`${expression}`).toEqual(`cat = Berlioz`)
+    expect(`${expression}`).toEqual(`cat = 'Berlioz'`)
   })
 
   it('stringifies the negated filter', () => {
     const expression = field('cat').notEquals('Berlioz')
-    expect(`${expression}`).toEqual(`cat != Berlioz`)
+    expect(`${expression}`).toEqual(`cat != 'Berlioz'`)
   })
 })
 
 describe('GreaterThan filter', () => {
   it('stringifies the filter', () => {
     const expression = field('age').isGreaterThan(5)
-    expect(`${expression}`).toEqual(`age > 5`)
+    expect(`${expression}`).toEqual(`age > '5'`)
   })
 
   it('stringifies the negated filter', () => {
     const expression = field('age').isNotGreaterThan(5)
-    expect(`${expression}`).toEqual(`age <= 5`)
+    expect(`${expression}`).toEqual(`age <= '5'`)
   })
 })
 
 describe('GreaterThanOrEquals filter', () => {
   it('stringifies the filter', () => {
     const expression = field('age').isGreaterThan(5, true)
-    expect(`${expression}`).toEqual(`age >= 5`)
+    expect(`${expression}`).toEqual(`age >= '5'`)
   })
 
   it('stringifies the negated filter', () => {
     const expression = field('age').isNotGreaterThan(5, true)
-    expect(`${expression}`).toEqual(`age < 5`)
+    expect(`${expression}`).toEqual(`age < '5'`)
   })
 })
 
 describe('LowerThan filter', () => {
   it('stringifies the filter', () => {
     const expression = field('age').isLowerThan(5)
-    expect(`${expression}`).toEqual(`age < 5`)
+    expect(`${expression}`).toEqual(`age < '5'`)
   })
 
   it('stringifies the negated filter', () => {
     const expression = field('age').isNotLowerThan(5)
-    expect(`${expression}`).toEqual(`age >= 5`)
+    expect(`${expression}`).toEqual(`age >= '5'`)
   })
 })
 
 describe('LowerThanOrEquals filter', () => {
   it('stringifies the filter', () => {
     const expression = field('age').isLowerThan(5, true)
-    expect(`${expression}`).toEqual(`age <= 5`)
+    expect(`${expression}`).toEqual(`age <= '5'`)
   })
 
   it('stringifies the negated filter', () => {
     const expression = field('age').isNotLowerThan(5, true)
-    expect(`${expression}`).toEqual(`age > 5`)
+    expect(`${expression}`).toEqual(`age > '5'`)
   })
 })
 
 describe('BETWEEN filter, boundaries included', () => {
   it('stringifies the filter', () => {
     const expression = field('age').isBetween(5, 10)
-    expect(`${expression}`).toEqual(`age 5 TO 10`)
+    expect(`${expression}`).toEqual(`age '5' TO '10'`)
   })
 
   it('stringifies the negated filter', () => {
     const expression = field('age').isNotBetween(5, 10)
-    expect(`${expression}`).toEqual(`NOT age 5 TO 10`)
+    expect(`${expression}`).toEqual(`NOT age '5' TO '10'`)
   })
 })
 
 describe('BETWEEN filter, boundaries excluded', () => {
   it('stringifies the filter', () => {
     const expression = field('age').isBetween(5, 10, false)
-    expect(`${expression}`).toEqual(`age > 5 AND age < 10`)
+    expect(`${expression}`).toEqual(`age > '5' AND age < '10'`)
   })
 
   it('stringifies the negated filter', () => {
     const expression = field('age').isNotBetween(5, 10, false)
-    expect(`${expression}`).toEqual(`NOT (age > 5 AND age < 10)`)
+    expect(`${expression}`).toEqual(`NOT (age > '5' AND age < '10')`)
   })
 })
 
@@ -126,12 +126,12 @@ describe('IN filter', () => {
 
   it('stringifies the filter', () => {
     const expression = cat.isIn(['Berlioz', "O'Malley"])
-    expect(`${expression}`).toEqual(`cat IN [Berlioz, 'O\\'Malley']`)
+    expect(`${expression}`).toEqual(`cat IN ['Berlioz', 'O\\'Malley']`)
   })
 
   it('stringifies the negated filter', () => {
     const expression = cat.isNotIn(['Berlioz', "O'Malley"])
-    expect(`${expression}`).toEqual(`cat NOT IN [Berlioz, 'O\\'Malley']`)
+    expect(`${expression}`).toEqual(`cat NOT IN ['Berlioz', 'O\\'Malley']`)
   })
 })
 
@@ -140,11 +140,11 @@ describe('OR filter', () => {
   const expression = cat.equals('Berlioz').or(cat.equals("O'Malley"))
 
   it('stringifies the filter', () => {
-    expect(`${expression}`).toEqual(`cat = Berlioz OR cat = 'O\\'Malley'`)
+    expect(`${expression}`).toEqual(`cat = 'Berlioz' OR cat = 'O\\'Malley'`)
   })
 
   it('stringifies the negated filter', () => {
-    expect(`${expression.negate()}`).toEqual(`NOT (cat = Berlioz OR cat = 'O\\'Malley')`)
+    expect(`${expression.negate()}`).toEqual(`NOT (cat = 'Berlioz' OR cat = 'O\\'Malley')`)
   })
 })
 
@@ -153,11 +153,11 @@ describe('AND filter', () => {
   const expression = cat.equals('Berlioz').and(cat.equals("O'Malley"))
 
   it('stringifies the filter', () => {
-    expect(`${expression}`).toEqual(`cat = Berlioz AND cat = 'O\\'Malley'`)
+    expect(`${expression}`).toEqual(`cat = 'Berlioz' AND cat = 'O\\'Malley'`)
   })
 
   it('stringifies the negated filter', () => {
-    expect(`${expression.negate()}`).toEqual(`NOT (cat = Berlioz AND cat = 'O\\'Malley')`)
+    expect(`${expression.negate()}`).toEqual(`NOT (cat = 'Berlioz' AND cat = 'O\\'Malley')`)
   })
 })
 
@@ -166,11 +166,11 @@ describe('AND filter', () => {
   const expression = cat.equals('Berlioz').and(cat.equals("O'Malley"))
 
   it('stringifies the filter', () => {
-    expect(`${expression}`).toEqual(`cat = Berlioz AND cat = 'O\\'Malley'`)
+    expect(`${expression}`).toEqual(`cat = 'Berlioz' AND cat = 'O\\'Malley'`)
   })
 
   it('stringifies the negated filter', () => {
-    expect(`${expression.negate()}`).toEqual(`NOT (cat = Berlioz AND cat = 'O\\'Malley')`)
+    expect(`${expression.negate()}`).toEqual(`NOT (cat = 'Berlioz' AND cat = 'O\\'Malley')`)
   })
 })
 
