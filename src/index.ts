@@ -88,6 +88,14 @@ class Field {
   isNotIn(values: Array<Stringable>): Expression {
     return this.isIn(values).negate()
   }
+
+  hasAll(values: Array<Stringable>): Expression {
+    return new And(values.map((value) => this.equals(value)))
+  }
+
+  hasNone(values: Array<Stringable>): Expression {
+    return this.hasAll(values).negate()
+  }
 }
 
 export const filterBuilder = (...expressions: Array<Expression>) => {
