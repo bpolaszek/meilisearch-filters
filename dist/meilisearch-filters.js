@@ -1,6 +1,6 @@
-var N = Object.defineProperty;
-var E = (s, t, e) => t in s ? N(s, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : s[t] = e;
-var a = (s, t, e) => (E(s, typeof t != "symbol" ? t + "" : t, e), e);
+var E = Object.defineProperty;
+var T = (s, t, e) => t in s ? E(s, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : s[t] = e;
+var a = (s, t, e) => (T(s, typeof t != "symbol" ? t + "" : t, e), e);
 const u = (s) => `'${`${s}`.replace(/[\\"']/g, "\\$&").replace(/\u0000/g, "\\0")}'`;
 class d extends Error {
   constructor(t, ...e) {
@@ -10,9 +10,9 @@ class d extends Error {
 const l = Symbol(), w = (s, t) => {
   const e = /* @__PURE__ */ new Map();
   for (const [...n] of t) {
-    const S = n.pop();
+    const N = n.pop();
     for (const f of n.flat())
-      e.has(f) || e.set(f, S);
+      e.has(f) || e.set(f, N);
   }
   if (!e.has(s) && !e.has(l))
     throw new d(s);
@@ -24,7 +24,7 @@ class r {
     throw new Error("This method has to be implemented.");
   }
   and(t) {
-    return t instanceof h && (t = t.group()), new m([this, t]);
+    return t instanceof h && (t = t.group()), new S([this, t]);
   }
   or(t) {
     return t instanceof h && (t = t.group()), new B([this, t]);
@@ -36,7 +36,7 @@ class r {
     return new x(this);
   }
 }
-class T extends r {
+class m extends r {
   toString() {
     return "";
   }
@@ -79,7 +79,7 @@ class $ extends r {
     return `NOT ${this.expression}`;
   }
 }
-class m extends h {
+class S extends h {
   constructor(t) {
     super(), this.expressions = t;
   }
@@ -239,12 +239,7 @@ class L {
     return this.isIn(t).negate();
   }
 }
-const R = (...s) => {
-  let t = new T();
-  for (const e of s)
-    t = t.and(e);
-  return t;
-}, j = (s) => new L(s), C = (s) => new $(s), M = (s) => new x(s);
+const R = (...s) => s.length === 0 ? new m() : new S(s), j = (s) => new L(s), C = (s) => new $(s), M = (s) => new x(s);
 function b(s, t, e) {
   return new G(s, t, e);
 }
