@@ -1,42 +1,42 @@
-var E = Object.defineProperty;
-var T = (s, t, e) => t in s ? E(s, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : s[t] = e;
-var a = (s, t, e) => (T(s, typeof t != "symbol" ? t + "" : t, e), e);
-const u = (s) => `'${`${s}`.replace(/[\\"']/g, "\\$&").replace(/\u0000/g, "\\0")}'`;
+var m = Object.defineProperty;
+var E = (n, t, e) => t in n ? m(n, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : n[t] = e;
+var a = (n, t, e) => (E(n, typeof t != "symbol" ? t + "" : t, e), e);
+const u = (n) => `'${`${n}`.replace(/[\\"']/g, "\\$&").replace(/\u0000/g, "\\0")}'`;
 class d extends Error {
   constructor(t, ...e) {
     super(...e), this.name = "UnhandledMatchError", this.message = `Unhandled match value of type ${typeof t} - ${t}`, Error.captureStackTrace(this, d);
   }
 }
-const l = Symbol(), w = (s, t) => {
+const c = Symbol(), x = (n, t) => {
   const e = /* @__PURE__ */ new Map();
-  for (const [...n] of t) {
-    const N = n.pop();
-    for (const f of n.flat())
-      e.has(f) || e.set(f, N);
+  for (const [...s] of t) {
+    const N = s.pop();
+    for (const w of s.flat())
+      e.has(w) || e.set(w, N);
   }
-  if (!e.has(s) && !e.has(l))
-    throw new d(s);
-  return e.get(s) ?? e.get(l);
+  if (!e.has(n) && !e.has(c))
+    throw new d(n);
+  return e.get(n) ?? e.get(c);
 };
-w.default = l;
+x.default = c;
 class r {
   toString() {
     throw new Error("This method has to be implemented.");
   }
   and(t) {
-    return t instanceof h && (t = t.group()), new S([this, t]);
+    return t instanceof h && (t = t.group()), new g([this, t]);
   }
   or(t) {
     return t instanceof h && (t = t.group()), new B([this, t]);
   }
   negate() {
-    return new $(this);
+    return new S(this);
   }
   group() {
-    return new x(this);
+    return new $(this);
   }
 }
-class m extends r {
+class T extends r {
   toString() {
     return "";
   }
@@ -60,7 +60,7 @@ class o extends r {
     super(), this.field = t;
   }
 }
-class x extends r {
+class $ extends r {
   constructor(t) {
     super(), this.expression = t;
   }
@@ -71,15 +71,24 @@ class x extends r {
     return this;
   }
 }
-class $ extends r {
+class S extends r {
   constructor(t) {
     super(), this.expression = t;
+  }
+  and(t) {
+    return this.group().and(t);
+  }
+  or(t) {
+    return this.group().or(t);
+  }
+  negate() {
+    return this.expression;
   }
   toString() {
     return `NOT ${this.expression}`;
   }
 }
-class S extends h {
+class g extends h {
   constructor(t) {
     super(), this.expressions = t;
   }
@@ -102,12 +111,12 @@ class B extends h {
   }
 }
 class i extends o {
-  constructor(t, e, n = "=") {
-    super(t), this.value = e, this.operator = n;
+  constructor(t, e, s = "=") {
+    super(t), this.value = e, this.operator = s;
   }
   negate() {
     const t = new i(this.field, this.value);
-    return t.operator = w(this.operator, [
+    return t.operator = x(this.operator, [
       ["=", "!="],
       ["!=", "="],
       [">", "<="],
@@ -121,48 +130,48 @@ class i extends o {
   }
 }
 class y extends o {
-  constructor(t, e, n) {
-    super(t), this.left = e, this.right = n;
+  constructor(t, e, s) {
+    super(t), this.left = e, this.right = s;
   }
   toString() {
     return `${this.field} ${u(this.left)} TO ${u(this.right)}`;
   }
 }
-class g extends o {
+class p extends o {
   constructor(e) {
     super(e);
     a(this, "negated", !1);
   }
   negate() {
-    const e = new g(this.field);
+    const e = new p(this.field);
     return e.negated = !this.negated, e;
   }
   toString() {
     return this.negated ? `${this.field} NOT EXISTS` : `${this.field} EXISTS`;
   }
 }
-class c extends o {
-  constructor(e, n) {
+class l extends o {
+  constructor(e, s) {
     super(e);
     a(this, "negated", !1);
-    this.type = n;
+    this.type = s;
   }
   negate() {
-    const e = new c(this.field, this.type);
+    const e = new l(this.field, this.type);
     return e.negated = !this.negated, e;
   }
   toString() {
     return this.negated ? `${this.field} IS NOT ${this.type}` : `${this.field} IS ${this.type}`;
   }
 }
-class p extends o {
-  constructor(e, n) {
+class f extends o {
+  constructor(e, s) {
     super(e);
     a(this, "negated", !1);
-    this.values = n;
+    this.values = s;
   }
   negate() {
-    const e = new p(this.field, this.values);
+    const e = new f(this.field, this.values);
     return e.negated = !this.negated, e;
   }
   toString() {
@@ -171,8 +180,8 @@ class p extends o {
   }
 }
 class G extends r {
-  constructor(t, e, n) {
-    super(), this.latitude = t, this.longitude = e, this.distanceInMeters = n;
+  constructor(t, e, s) {
+    super(), this.latitude = t, this.longitude = e, this.distanceInMeters = s;
   }
   toString() {
     return `_geoRadius(${this.latitude}, ${this.longitude}, ${this.distanceInMeters})`;
@@ -183,7 +192,7 @@ class I extends r {
     super(), this.topLeftCorner = t, this.bottomRightCorner = e;
   }
   toString() {
-    return `_geoBoundingBox(${[this.topLeftCorner, this.bottomRightCorner].map(([e, n]) => `[${e}, ${n}]`).join(", ")})`;
+    return `_geoBoundingBox(${[this.topLeftCorner, this.bottomRightCorner].map(([e, s]) => `[${e}, ${s}]`).join(", ")})`;
   }
 }
 class L {
@@ -208,57 +217,63 @@ class L {
   isNotLowerThan(t, e = !1) {
     return this.isLowerThan(t, e).negate();
   }
-  isBetween(t, e, n = !0) {
-    return n ? new y(this.field, t, e) : this.isGreaterThan(t).and(this.isLowerThan(e));
+  isBetween(t, e, s = !0) {
+    return s ? new y(this.field, t, e) : this.isGreaterThan(t).and(this.isLowerThan(e));
   }
-  isNotBetween(t, e, n = !0) {
-    return this.isBetween(t, e, n).negate();
+  isNotBetween(t, e, s = !0) {
+    return this.isBetween(t, e, s).negate();
   }
   exists() {
-    return new g(this.field);
+    return new p(this.field);
   }
   doesNotExist() {
     return this.exists().negate();
   }
   isNull() {
-    return new c(this.field, "NULL");
+    return new l(this.field, "NULL");
   }
   isNotNull() {
     return this.isNull().negate();
   }
   isEmpty() {
-    return new c(this.field, "EMPTY");
+    return new l(this.field, "EMPTY");
   }
   isNotEmpty() {
     return this.isEmpty().negate();
   }
   isIn(t) {
-    return new p(this.field, t);
+    return new f(this.field, t);
   }
   isNotIn(t) {
     return this.isIn(t).negate();
   }
+  hasAll(t) {
+    return new g(t.map((e) => this.equals(e)));
+  }
+  hasNone(t) {
+    return this.hasAll(t).negate();
+  }
 }
-const R = (...s) => s.length === 0 ? new m() : new S(s), j = (s) => new L(s), C = (s) => new $(s), M = (s) => new x(s);
-function b(s, t, e) {
-  return new G(s, t, e);
+const R = (...n) => n.length === 0 ? new T() : new g(n), j = (n) => new L(n), A = (n) => new S(n), C = (n) => new $(n);
+function b(n, t, e) {
+  return new G(n, t, e);
 }
-function q(s, t, e) {
-  return b(s, t, e).negate();
+function M(n, t, e) {
+  return b(n, t, e).negate();
 }
-function v(s, t) {
-  return new I(s, t);
+function v(n, t) {
+  return new I(n, t);
 }
-function A(s, t) {
-  return v(s, t).negate();
+function q(n, t) {
+  return v(n, t).negate();
 }
 export {
   j as field,
   R as filterBuilder,
-  M as group,
-  C as not,
-  A as notWithinGeoBoundingBox,
-  q as notWithinGeoRadius,
+  C as group,
+  A as not,
+  q as notWithinGeoBoundingBox,
+  M as notWithinGeoRadius,
   v as withinGeoBoundingBox,
   b as withinGeoRadius
 };

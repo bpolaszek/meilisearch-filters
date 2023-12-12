@@ -77,6 +77,18 @@ export class Not extends Expression {
     super()
   }
 
+  and(expression: Expression): Expression {
+    return this.group().and(expression)
+  }
+
+  or(expression: Expression): Expression {
+    return this.group().or(expression)
+  }
+
+  negate(): Expression {
+    return this.expression
+  }
+
   toString() {
     return `NOT ${this.expression}`
   }

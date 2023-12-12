@@ -21,8 +21,10 @@ declare class Field {
     isNotEmpty(): Expression;
     isIn(values: Array<Stringable>): Expression;
     isNotIn(values: Array<Stringable>): Expression;
+    hasAll(values: Array<Stringable>): Expression;
+    hasNone(values: Array<Stringable>): Expression;
 }
-export declare const filterBuilder: (...expressions: Array<Expression>) => EmptyExpression | And;
+export declare const filterBuilder: (...expressions: Array<Expression>) => And | EmptyExpression;
 export declare const field: (field: string) => Field;
 export declare const not: (expression: Expression) => Not;
 export declare const group: (expression: Expression) => Group;

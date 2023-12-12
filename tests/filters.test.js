@@ -144,6 +144,20 @@ describe('IN filter', () => {
   })
 })
 
+describe('hasAll / hasNone filter', () => {
+  const color = field('color')
+
+  it('stringifies the filter', () => {
+    const expression = color.hasAll(['blue', 'green'])
+    expect(`${expression}`).toEqual(`color = 'blue' AND color = 'green'`)
+  })
+
+  it('stringifies the negated filter', () => {
+    const expression = color.hasNone(['blue', 'green'])
+    expect(`${expression}`).toEqual(`NOT (color = 'blue' AND color = 'green')`)
+  })
+})
+
 describe('OR filter', () => {
   const cat = field('cat')
   const expression = cat.equals('Berlioz').or(cat.equals("O'Malley"))
@@ -154,19 +168,6 @@ describe('OR filter', () => {
 
   it('stringifies the negated filter', () => {
     expect(`${expression.negate()}`).toEqual(`NOT (cat = 'Berlioz' OR cat = 'O\\'Malley')`)
-  })
-})
-
-describe('AND filter', () => {
-  const cat = field('cat')
-  const expression = cat.equals('Berlioz').and(cat.equals("O'Malley"))
-
-  it('stringifies the filter', () => {
-    expect(`${expression}`).toEqual(`cat = 'Berlioz' AND cat = 'O\\'Malley'`)
-  })
-
-  it('stringifies the negated filter', () => {
-    expect(`${expression.negate()}`).toEqual(`NOT (cat = 'Berlioz' AND cat = 'O\\'Malley')`)
   })
 })
 
