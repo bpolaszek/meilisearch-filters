@@ -14,8 +14,9 @@ import {
   Is,
   Latitude,
   Longitude,
-  Not, And,
-} from './expression.ts';
+  Not,
+  And,
+} from './expression.ts'
 
 type Stringable = string | number | {toString(): string}
 

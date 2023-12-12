@@ -54,7 +54,7 @@ export class EmptyExpression extends Expression {
 export class CompositeExpression extends Expression {}
 export class FieldExpression extends Expression {
   constructor(public field: string) {
-    super();
+    super()
   }
 }
 
