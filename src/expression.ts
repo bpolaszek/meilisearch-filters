@@ -51,7 +51,12 @@ export class EmptyExpression extends Expression {
   }
 }
 
-class CompositeExpression extends Expression {}
+export class CompositeExpression extends Expression {}
+export class FieldExpression extends Expression {
+  constructor(public field: string) {
+    super();
+  }
+}
 
 export class Group extends Expression {
   constructor(public expression: Expression) {
@@ -106,13 +111,13 @@ export class Or extends CompositeExpression {
 }
 
 type ComparisonOperator = '=' | '!=' | '>' | '>=' | '<' | '<='
-export class Comparison extends Expression {
+export class Comparison extends FieldExpression {
   constructor(
-    public field: string,
+    field: string,
     public value: any,
     public operator: ComparisonOperator = '='
   ) {
-    super()
+    super(field)
   }
 
   negate(): Expression {
@@ -133,13 +138,13 @@ export class Comparison extends Expression {
   }
 }
 
-export class Between extends Expression {
+export class Between extends FieldExpression {
   constructor(
-    public field: string,
+    field: string,
     public left: any,
     public right: any
   ) {
-    super()
+    super(field)
   }
 
   toString() {
@@ -147,11 +152,11 @@ export class Between extends Expression {
   }
 }
 
-export class Exists extends Expression {
+export class Exists extends FieldExpression {
   private negated: boolean = false
 
-  constructor(public field: string) {
-    super()
+  constructor(field: string) {
+    super(field)
   }
 
   negate(): Expression {
@@ -167,14 +172,14 @@ export class Exists extends Expression {
 
 export type IsFilterType = 'EMPTY' | 'NULL'
 
-export class Is extends Expression {
+export class Is extends FieldExpression {
   private negated: boolean = false
 
   constructor(
-    public field: string,
+    field: string,
     public type: IsFilterType
   ) {
-    super()
+    super(field)
   }
 
   negate(): Expression {
@@ -188,14 +193,14 @@ export class Is extends Expression {
   }
 }
 
-export class In extends Expression {
+export class In extends FieldExpression {
   private negated: boolean = false
 
   constructor(
-    public field: string,
+    field: string,
     public values: Array<any>
   ) {
-    super()
+    super(field)
   }
 
   negate(): Expression {

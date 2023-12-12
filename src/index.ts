@@ -5,6 +5,8 @@ import {
   EmptyExpression,
   Exists,
   Expression,
+  FieldExpression,
+  CompositeExpression,
   GeoBoundingBox,
   GeoRadius,
   Group,
@@ -114,3 +116,5 @@ export function withinGeoBoundingBox(topLeftCorner: Coordinates, bottomRightCorn
 export function notWithinGeoBoundingBox(topLeftCorner: Coordinates, bottomRightCorner: Coordinates): Expression {
   return withinGeoBoundingBox(topLeftCorner, bottomRightCorner).negate()
 }
+
+export type {Expression, FieldExpression, CompositeExpression, Field}

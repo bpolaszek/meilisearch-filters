@@ -12,7 +12,11 @@ export declare class EmptyExpression extends Expression {
     negate(): Expression;
     group(): Expression;
 }
-declare class CompositeExpression extends Expression {
+export declare class CompositeExpression extends Expression {
+}
+export declare class FieldExpression extends Expression {
+    field: string;
+    constructor(field: string);
 }
 export declare class Group extends Expression {
     expression: Expression;
@@ -38,39 +42,34 @@ export declare class Or extends CompositeExpression {
     toString(): string;
 }
 type ComparisonOperator = '=' | '!=' | '>' | '>=' | '<' | '<=';
-export declare class Comparison extends Expression {
-    field: string;
+export declare class Comparison extends FieldExpression {
     value: any;
     operator: ComparisonOperator;
     constructor(field: string, value: any, operator?: ComparisonOperator);
     negate(): Expression;
     toString(): string;
 }
-export declare class Between extends Expression {
-    field: string;
+export declare class Between extends FieldExpression {
     left: any;
     right: any;
     constructor(field: string, left: any, right: any);
     toString(): string;
 }
-export declare class Exists extends Expression {
-    field: string;
+export declare class Exists extends FieldExpression {
     private negated;
     constructor(field: string);
     negate(): Expression;
     toString(): string;
 }
 export type IsFilterType = 'EMPTY' | 'NULL';
-export declare class Is extends Expression {
-    field: string;
+export declare class Is extends FieldExpression {
     type: IsFilterType;
     private negated;
     constructor(field: string, type: IsFilterType);
     negate(): Expression;
     toString(): string;
 }
-export declare class In extends Expression {
-    field: string;
+export declare class In extends FieldExpression {
     values: Array<any>;
     private negated;
     constructor(field: string, values: Array<any>);

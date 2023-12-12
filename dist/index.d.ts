@@ -1,4 +1,4 @@
-import { Coordinates, Expression, Group, Latitude, Longitude, Not } from './expression.ts';
+import { Coordinates, Expression, FieldExpression, CompositeExpression, Group, Latitude, Longitude, Not } from './expression.ts';
 type Stringable = string | number | {
     toString(): string;
 };
@@ -30,4 +30,4 @@ export declare function withinGeoRadius(latitude: Latitude, longitude: Longitude
 export declare function notWithinGeoRadius(latitude: Latitude, longitude: Longitude, distanceInMeters: number): Expression;
 export declare function withinGeoBoundingBox(topLeftCorner: Coordinates, bottomRightCorner: Coordinates): Expression;
 export declare function notWithinGeoBoundingBox(topLeftCorner: Coordinates, bottomRightCorner: Coordinates): Expression;
-export {};
+export type { Expression, FieldExpression, CompositeExpression, Field };
