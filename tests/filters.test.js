@@ -1,6 +1,13 @@
-import { field, filterBuilder, notWithinGeoBoundingBox, notWithinGeoRadius, withinGeoBoundingBox, withinGeoRadius } from '@';
-import { And, EmptyExpression } from '@/expression';
-import exp from 'node:constants';
+import {
+  field,
+  filterBuilder,
+  notWithinGeoBoundingBox,
+  notWithinGeoRadius,
+  withinGeoBoundingBox,
+  withinGeoRadius,
+} from '@'
+import {And, EmptyExpression} from '@/expression'
+import exp from 'node:constants'
 import {describe, it, expect} from 'vitest'
 
 describe('EQUALS filter', () => {
@@ -201,30 +208,30 @@ describe('GeoBoundingBox filter', () => {
 })
 
 describe('Empty expression', () => {
-  let expression = filterBuilder();
+  let expression = filterBuilder()
   it('stringifies the filter', () => {
     expect(expression).toBeInstanceOf(EmptyExpression)
     expect(`${expression}`).toBe('')
-    let result = expression.and(field('foo').equals('bar'));
+    let result = expression.and(field('foo').equals('bar'))
     expect(`${result}`).toBe("foo = 'bar'")
-    result = expression.or(field('foo').equals('bar'));
+    result = expression.or(field('foo').equals('bar'))
     expect(`${result}`).toBe("foo = 'bar'")
-    result = expression.group();
+    result = expression.group()
     expect(result).toBe(expression)
   })
 
   it('cannot be negated', () => {
     expect(() => expression.negate()).toThrowError()
-  });
+  })
 
   it('can be built with several filters', () => {
     const expression = filterBuilder(
       field('foo').equals('bar'),
       field('fruit').equals('banana'),
-      field('vegetable').equals('potato'),
+      field('vegetable').equals('potato')
     )
 
     expect(expression).toBeInstanceOf(And)
     expect(`${expression}`).toBe("foo = 'bar' AND fruit = 'banana' AND vegetable = 'potato'")
-  });
-});
+  })
+})
