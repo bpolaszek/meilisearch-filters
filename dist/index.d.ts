@@ -1,4 +1,4 @@
-import { Coordinates, Expression, Group, Latitude, Longitude, Not } from './expression.ts';
+import { Coordinates, EmptyExpression, Expression, FieldExpression, CompositeExpression, Group, Latitude, Longitude, Not, And } from './expression.ts';
 type Stringable = string | number | {
     toString(): string;
 };
@@ -22,7 +22,7 @@ declare class Field {
     isIn(values: Array<Stringable>): Expression;
     isNotIn(values: Array<Stringable>): Expression;
 }
-export declare const filterBuilder: (...filters: Array<Expression>) => Expression;
+export declare const filterBuilder: (...expressions: Array<Expression>) => EmptyExpression | And;
 export declare const field: (field: string) => Field;
 export declare const not: (expression: Expression) => Not;
 export declare const group: (expression: Expression) => Group;
@@ -30,4 +30,4 @@ export declare function withinGeoRadius(latitude: Latitude, longitude: Longitude
 export declare function notWithinGeoRadius(latitude: Latitude, longitude: Longitude, distanceInMeters: number): Expression;
 export declare function withinGeoBoundingBox(topLeftCorner: Coordinates, bottomRightCorner: Coordinates): Expression;
 export declare function notWithinGeoBoundingBox(topLeftCorner: Coordinates, bottomRightCorner: Coordinates): Expression;
-export {};
+export type { Expression, FieldExpression, CompositeExpression, Field };
