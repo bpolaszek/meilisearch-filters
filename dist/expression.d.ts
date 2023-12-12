@@ -1,22 +1,29 @@
 export declare class Expression {
     toString(): void;
-    and(expression: Expression): Expression;
-    or(expression: Expression): Expression;
+    and(expression: Expression, ...expressions: Array<Expression>): Expression;
+    or(expression: Expression, ...expressions: Array<Expression>): Expression;
     negate(): Expression;
     group(): Expression;
 }
 export declare class EmptyExpression extends Expression {
     toString(): string;
-    and(expression: Expression): Expression;
-    or(expression: Expression): Expression;
+    and(expression: Expression, ...expressions: Array<Expression>): Expression;
+    or(expression: Expression, ...expressions: Array<Expression>): Expression;
     negate(): Expression;
     group(): Expression;
 }
 export declare class CompositeExpression extends Expression {
+    expressions: Array<Expression>;
+    constructor(expressions: Array<Expression>);
+    negate(): Expression;
 }
-export declare class FieldExpression extends Expression {
-    field: string;
-    constructor(field: string);
+export declare class And extends CompositeExpression {
+    constructor(expressions: Array<Expression>);
+    toString(): string;
+}
+export declare class Or extends CompositeExpression {
+    constructor(expressions: Array<Expression>);
+    toString(): string;
 }
 export declare class Group extends Expression {
     expression: Expression;
@@ -27,22 +34,14 @@ export declare class Group extends Expression {
 export declare class Not extends Expression {
     expression: Expression;
     constructor(expression: Expression);
-    and(expression: Expression): Expression;
-    or(expression: Expression): Expression;
+    and(expression: Expression, ...expressions: Array<Expression>): Expression;
+    or(expression: Expression, ...expressions: Array<Expression>): Expression;
     negate(): Expression;
     toString(): string;
 }
-export declare class And extends CompositeExpression {
-    expressions: Array<Expression>;
-    constructor(expressions: Array<Expression>);
-    negate(): Expression;
-    toString(): string;
-}
-export declare class Or extends CompositeExpression {
-    expressions: Array<Expression>;
-    constructor(expressions: Array<Expression>);
-    negate(): Expression;
-    toString(): string;
+export declare class FieldExpression extends Expression {
+    field: string;
+    constructor(field: string);
 }
 type ComparisonOperator = '=' | '!=' | '>' | '>=' | '<' | '<=';
 export declare class Comparison extends FieldExpression {

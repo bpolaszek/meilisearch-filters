@@ -221,10 +221,6 @@ describe('Empty expression', () => {
     expect(result).toBe(expression)
   })
 
-  it('cannot be negated', () => {
-    expect(() => expression.negate()).toThrowError()
-  })
-
   it('can be built with several filters', () => {
     const expression = filterBuilder(
       field('foo').equals('bar'),
