@@ -22,6 +22,7 @@ declare class Field {
     isIn(values: Array<Stringable>): Expression;
     isNotIn(values: Array<Stringable>): Expression;
 }
+export declare const filterBuilder: (...filters: Array<Expression>) => Expression;
 export declare const field: (field: string) => Field;
 export declare const not: (expression: Expression) => Not;
 export declare const group: (expression: Expression) => Group;

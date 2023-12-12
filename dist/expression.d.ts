@@ -1,9 +1,16 @@
 export declare class Expression {
     toString(): void;
-    and(expression: Expression): And;
-    or(expression: Expression): Or;
+    and(expression: Expression): Expression;
+    or(expression: Expression): Expression;
     negate(): Expression;
-    group(): Group;
+    group(): Expression;
+}
+export declare class EmptyExpression extends Expression {
+    toString(): string;
+    and(expression: Expression): Expression;
+    or(expression: Expression): Expression;
+    negate(): Expression;
+    group(): Expression;
 }
 declare class CompositeExpression extends Expression {
 }

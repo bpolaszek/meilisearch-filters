@@ -120,6 +120,32 @@ const color = field('ginger')
 `${group(color.equals('ginger'))}` // (color = 'ginger') 
 ```
 
+### Instantiation
+
+#### Without any filter
+
+```js
+import {filterBuilder} from 'meilisearch-filters'
+
+let filters = filterBuilder()
+`${filters}` // ''
+filters = filters.and(field('foo').equals('bar'))
+`${filters}` // foo = 'bar'
+```
+
+#### With existing filters
+
+```js
+import {filterBuilder} from 'meilisearch-filters'
+
+let filters = filterBuilder(
+  field('foo').equals('bar'), 
+  field('fruit').equals('banana'),
+  field('vegetable').equals('potato'),
+)
+`${filters}` // foo = 'bar' AND fruit = 'banana' AND vegetable = 'POTATO'
+```
+
 # Installation
 
 ```

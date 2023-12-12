@@ -7,36 +7,53 @@ class d extends Error {
     super(...e), this.name = "UnhandledMatchError", this.message = `Unhandled match value of type ${typeof t} - ${t}`, Error.captureStackTrace(this, d);
   }
 }
-const l = Symbol(), p = (s, t) => {
+const l = Symbol(), f = (s, t) => {
   const e = /* @__PURE__ */ new Map();
   for (const [...n] of t) {
-    const x = n.pop();
-    for (const f of n.flat())
-      e.has(f) || e.set(f, x);
+    const $ = n.pop();
+    for (const p of n.flat())
+      e.has(p) || e.set(p, $);
   }
   if (!e.has(s) && !e.has(l))
     throw new d(s);
   return e.get(s) ?? e.get(l);
 };
-p.default = l;
+f.default = l;
 class r {
   toString() {
     throw new Error("This method has to be implemented.");
   }
   and(t) {
-    return t instanceof h && (t = t.group()), new T([this, t]);
+    return t instanceof u && (t = t.group()), new m([this, t]);
   }
   or(t) {
-    return t instanceof h && (t = t.group()), new m([this, t]);
+    return t instanceof u && (t = t.group()), new E([this, t]);
   }
   negate() {
-    return new $(this);
+    return new x(this);
   }
   group() {
     return new w(this);
   }
 }
-class h extends r {
+class T extends r {
+  toString() {
+    return "";
+  }
+  and(t) {
+    return t;
+  }
+  or(t) {
+    return t;
+  }
+  negate() {
+    throw new Error("An empty expression cannot be negated.");
+  }
+  group() {
+    return this;
+  }
+}
+class u extends r {
 }
 class w extends r {
   constructor(t) {
@@ -49,7 +66,7 @@ class w extends r {
     return this;
   }
 }
-class $ extends r {
+class x extends r {
   constructor(t) {
     super(), this.expression = t;
   }
@@ -57,7 +74,7 @@ class $ extends r {
     return `NOT ${this.expression}`;
   }
 }
-class T extends h {
+class m extends u {
   constructor(t) {
     super(), this.expressions = t;
   }
@@ -68,7 +85,7 @@ class T extends h {
     return this.expressions.join(" AND ");
   }
 }
-class m extends h {
+class E extends u {
   constructor(t) {
     super(), this.expressions = t;
   }
@@ -85,7 +102,7 @@ class i extends r {
   }
   negate() {
     const t = new i(this.field, this.value);
-    return t.operator = p(this.operator, [
+    return t.operator = f(this.operator, [
       ["=", "!="],
       ["!=", "="],
       [">", "<="],
@@ -120,14 +137,14 @@ class c extends r {
     return this.negated ? `${this.field} NOT EXISTS` : `${this.field} EXISTS`;
   }
 }
-class u extends r {
+class h extends r {
   constructor(e, n) {
     super();
     o(this, "negated", !1);
     this.field = e, this.type = n;
   }
   negate() {
-    const e = new u(this.field, this.type);
+    const e = new h(this.field, this.type);
     return e.negated = !this.negated, e;
   }
   toString() {
@@ -149,7 +166,7 @@ class g extends r {
     return this.negated ? `${this.field} NOT IN [${e.join(", ")}]` : `${this.field} IN [${e.join(", ")}]`;
   }
 }
-class E extends r {
+class y extends r {
   constructor(t, e, n) {
     super(), this.latitude = t, this.longitude = e, this.distanceInMeters = n;
   }
@@ -200,13 +217,13 @@ class I {
     return this.exists().negate();
   }
   isNull() {
-    return new u(this.field, "NULL");
+    return new h(this.field, "NULL");
   }
   isNotNull() {
     return this.isNull().negate();
   }
   isEmpty() {
-    return new u(this.field, "EMPTY");
+    return new h(this.field, "EMPTY");
   }
   isNotEmpty() {
     return this.isEmpty().negate();
@@ -218,25 +235,31 @@ class I {
     return this.isIn(t).negate();
   }
 }
-const O = (s) => new I(s), R = (s) => new $(s), b = (s) => new w(s);
-function y(s, t, e) {
-  return new E(s, t, e);
+const O = (...s) => {
+  let t = new T();
+  for (const e of s)
+    t = t.and(e);
+  return t;
+}, R = (s) => new I(s), j = (s) => new x(s), C = (s) => new w(s);
+function L(s, t, e) {
+  return new y(s, t, e);
 }
-function j(s, t, e) {
-  return y(s, t, e).negate();
+function M(s, t, e) {
+  return L(s, t, e).negate();
 }
-function L(s, t) {
+function b(s, t) {
   return new G(s, t);
 }
-function C(s, t) {
-  return L(s, t).negate();
+function q(s, t) {
+  return b(s, t).negate();
 }
 export {
-  O as field,
-  b as group,
-  R as not,
-  C as notWithinGeoBoundingBox,
-  j as notWithinGeoRadius,
-  L as withinGeoBoundingBox,
-  y as withinGeoRadius
+  R as field,
+  O as filterBuilder,
+  C as group,
+  j as not,
+  q as notWithinGeoBoundingBox,
+  M as notWithinGeoRadius,
+  b as withinGeoBoundingBox,
+  L as withinGeoRadius
 };
