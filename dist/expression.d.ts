@@ -27,6 +27,9 @@ export declare class Group extends Expression {
 export declare class Not extends Expression {
     expression: Expression;
     constructor(expression: Expression);
+    and(expression: Expression): Expression;
+    or(expression: Expression): Expression;
+    negate(): Expression;
     toString(): string;
 }
 export declare class And extends CompositeExpression {

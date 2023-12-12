@@ -1,22 +1,22 @@
 var m = Object.defineProperty;
-var E = (s, t, e) => t in s ? m(s, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : s[t] = e;
-var a = (s, t, e) => (E(s, typeof t != "symbol" ? t + "" : t, e), e);
-const u = (s) => `'${`${s}`.replace(/[\\"']/g, "\\$&").replace(/\u0000/g, "\\0")}'`;
+var E = (n, t, e) => t in n ? m(n, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : n[t] = e;
+var a = (n, t, e) => (E(n, typeof t != "symbol" ? t + "" : t, e), e);
+const u = (n) => `'${`${n}`.replace(/[\\"']/g, "\\$&").replace(/\u0000/g, "\\0")}'`;
 class d extends Error {
   constructor(t, ...e) {
     super(...e), this.name = "UnhandledMatchError", this.message = `Unhandled match value of type ${typeof t} - ${t}`, Error.captureStackTrace(this, d);
   }
 }
-const c = Symbol(), x = (s, t) => {
+const c = Symbol(), x = (n, t) => {
   const e = /* @__PURE__ */ new Map();
-  for (const [...n] of t) {
-    const N = n.pop();
-    for (const w of n.flat())
+  for (const [...s] of t) {
+    const N = s.pop();
+    for (const w of s.flat())
       e.has(w) || e.set(w, N);
   }
-  if (!e.has(s) && !e.has(c))
-    throw new d(s);
-  return e.get(s) ?? e.get(c);
+  if (!e.has(n) && !e.has(c))
+    throw new d(n);
+  return e.get(n) ?? e.get(c);
 };
 x.default = c;
 class r {
@@ -75,6 +75,15 @@ class S extends r {
   constructor(t) {
     super(), this.expression = t;
   }
+  and(t) {
+    return this.group().and(t);
+  }
+  or(t) {
+    return this.group().or(t);
+  }
+  negate() {
+    return this.expression;
+  }
   toString() {
     return `NOT ${this.expression}`;
   }
@@ -102,8 +111,8 @@ class B extends h {
   }
 }
 class i extends o {
-  constructor(t, e, n = "=") {
-    super(t), this.value = e, this.operator = n;
+  constructor(t, e, s = "=") {
+    super(t), this.value = e, this.operator = s;
   }
   negate() {
     const t = new i(this.field, this.value);
@@ -121,8 +130,8 @@ class i extends o {
   }
 }
 class y extends o {
-  constructor(t, e, n) {
-    super(t), this.left = e, this.right = n;
+  constructor(t, e, s) {
+    super(t), this.left = e, this.right = s;
   }
   toString() {
     return `${this.field} ${u(this.left)} TO ${u(this.right)}`;
@@ -142,10 +151,10 @@ class p extends o {
   }
 }
 class l extends o {
-  constructor(e, n) {
+  constructor(e, s) {
     super(e);
     a(this, "negated", !1);
-    this.type = n;
+    this.type = s;
   }
   negate() {
     const e = new l(this.field, this.type);
@@ -156,10 +165,10 @@ class l extends o {
   }
 }
 class f extends o {
-  constructor(e, n) {
+  constructor(e, s) {
     super(e);
     a(this, "negated", !1);
-    this.values = n;
+    this.values = s;
   }
   negate() {
     const e = new f(this.field, this.values);
@@ -171,8 +180,8 @@ class f extends o {
   }
 }
 class G extends r {
-  constructor(t, e, n) {
-    super(), this.latitude = t, this.longitude = e, this.distanceInMeters = n;
+  constructor(t, e, s) {
+    super(), this.latitude = t, this.longitude = e, this.distanceInMeters = s;
   }
   toString() {
     return `_geoRadius(${this.latitude}, ${this.longitude}, ${this.distanceInMeters})`;
@@ -183,7 +192,7 @@ class I extends r {
     super(), this.topLeftCorner = t, this.bottomRightCorner = e;
   }
   toString() {
-    return `_geoBoundingBox(${[this.topLeftCorner, this.bottomRightCorner].map(([e, n]) => `[${e}, ${n}]`).join(", ")})`;
+    return `_geoBoundingBox(${[this.topLeftCorner, this.bottomRightCorner].map(([e, s]) => `[${e}, ${s}]`).join(", ")})`;
   }
 }
 class L {
@@ -208,11 +217,11 @@ class L {
   isNotLowerThan(t, e = !1) {
     return this.isLowerThan(t, e).negate();
   }
-  isBetween(t, e, n = !0) {
-    return n ? new y(this.field, t, e) : this.isGreaterThan(t).and(this.isLowerThan(e));
+  isBetween(t, e, s = !0) {
+    return s ? new y(this.field, t, e) : this.isGreaterThan(t).and(this.isLowerThan(e));
   }
-  isNotBetween(t, e, n = !0) {
-    return this.isBetween(t, e, n).negate();
+  isNotBetween(t, e, s = !0) {
+    return this.isBetween(t, e, s).negate();
   }
   exists() {
     return new p(this.field);
@@ -245,18 +254,18 @@ class L {
     return this.hasAll(t).negate();
   }
 }
-const R = (...s) => s.length === 0 ? new T() : new g(s), j = (s) => new L(s), A = (s) => new S(s), C = (s) => new $(s);
-function b(s, t, e) {
-  return new G(s, t, e);
+const R = (...n) => n.length === 0 ? new T() : new g(n), j = (n) => new L(n), A = (n) => new S(n), C = (n) => new $(n);
+function b(n, t, e) {
+  return new G(n, t, e);
 }
-function M(s, t, e) {
-  return b(s, t, e).negate();
+function M(n, t, e) {
+  return b(n, t, e).negate();
 }
-function v(s, t) {
-  return new I(s, t);
+function v(n, t) {
+  return new I(n, t);
 }
-function q(s, t) {
-  return v(s, t).negate();
+function q(n, t) {
+  return v(n, t).negate();
 }
 export {
   j as field,
