@@ -2,6 +2,7 @@ import {
   Between,
   Comparison,
   Coordinates,
+  EmptyExpression,
   Exists,
   Expression,
   GeoBoundingBox,
@@ -86,6 +87,14 @@ class Field {
   }
 }
 
+export const filterBuilder = (...filters: Array<Expression>) => {
+  let expression: Expression = new EmptyExpression()
+  for (const filter of filters) {
+    expression = expression.and(filter)
+  }
+
+  return expression
+}
 export const field = (field: string) => new Field(field)
 export const not = (expression: Expression) => new Not(expression)
 export const group = (expression: Expression) => new Group(expression)

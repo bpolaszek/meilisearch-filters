@@ -6,14 +6,14 @@ export class Expression {
     throw new Error('This method has to be implemented.')
   }
 
-  and(expression: Expression): And {
+  and(expression: Expression): Expression {
     if (expression instanceof CompositeExpression) {
       expression = expression.group()
     }
     return new And([this, expression])
   }
 
-  or(expression: Expression): Or {
+  or(expression: Expression): Expression {
     if (expression instanceof CompositeExpression) {
       expression = expression.group()
     }
@@ -24,8 +24,30 @@ export class Expression {
     return new Not(this)
   }
 
-  group(): Group {
+  group(): Expression {
     return new Group(this)
+  }
+}
+
+export class EmptyExpression extends Expression {
+  toString() {
+    return ''
+  }
+
+  and(expression: Expression): Expression {
+    return expression
+  }
+
+  or(expression: Expression): Expression {
+    return expression
+  }
+
+  negate(): Expression {
+    throw new Error('An empty expression cannot be negated.')
+  }
+
+  group(): Expression {
+    return this
   }
 }
 
