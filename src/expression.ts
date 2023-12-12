@@ -6,18 +6,12 @@ export class Expression {
     throw new Error('This method has to be implemented.')
   }
 
-  and(expression: Expression): Expression {
-    if (expression instanceof CompositeExpression) {
-      expression = expression.group()
-    }
-    return new And([this, expression])
+  and(expression: Expression, ...expressions: Array<Expression>): Expression {
+    return new And([this, expression, ...expressions])
   }
 
-  or(expression: Expression): Expression {
-    if (expression instanceof CompositeExpression) {
-      expression = expression.group()
-    }
-    return new Or([this, expression])
+  or(expression: Expression, ...expressions: Array<Expression>): Expression {
+    return new Or([this, expression, ...expressions])
   }
 
   negate(): Expression {
@@ -34,16 +28,16 @@ export class EmptyExpression extends Expression {
     return ''
   }
 
-  and(expression: Expression): Expression {
-    return expression
+  and(expression: Expression, ...expressions: Array<Expression>): Expression {
+    return 0 === expressions.length ? expression : new And([expression, ...expressions])
   }
 
-  or(expression: Expression): Expression {
-    return expression
+  or(expression: Expression, ...expressions: Array<Expression>): Expression {
+    return 0 === expressions.length ? expression : new Or([expression, ...expressions])
   }
 
   negate(): Expression {
-    throw new Error('An empty expression cannot be negated.')
+    return this
   }
 
   group(): Expression {
@@ -51,10 +45,38 @@ export class EmptyExpression extends Expression {
   }
 }
 
-export class CompositeExpression extends Expression {}
-export class FieldExpression extends Expression {
-  constructor(public field: string) {
+export class CompositeExpression extends Expression {
+  public expressions: Array<Expression>
+
+  constructor(expressions: Array<Expression>) {
     super()
+    this.expressions = expressions.map((expression) =>
+      expression instanceof CompositeExpression ? expression.group() : expression
+    )
+  }
+
+  negate(): Expression {
+    return this.group().negate()
+  }
+}
+
+export class And extends CompositeExpression {
+  constructor(expressions: Array<Expression>) {
+    super(expressions)
+  }
+
+  toString() {
+    return this.expressions.join(' AND ')
+  }
+}
+
+export class Or extends CompositeExpression {
+  constructor(expressions: Array<Expression>) {
+    super(expressions)
+  }
+
+  toString() {
+    return this.expressions.join(' OR ')
   }
 }
 
@@ -77,12 +99,12 @@ export class Not extends Expression {
     super()
   }
 
-  and(expression: Expression): Expression {
-    return this.group().and(expression)
+  and(expression: Expression, ...expressions: Array<Expression>): Expression {
+    return this.group().and(expression, ...expressions)
   }
 
-  or(expression: Expression): Expression {
-    return this.group().or(expression)
+  or(expression: Expression, ...expressions: Array<Expression>): Expression {
+    return this.group().or(expression, ...expressions)
   }
 
   negate(): Expression {
@@ -94,35 +116,14 @@ export class Not extends Expression {
   }
 }
 
-export class And extends CompositeExpression {
-  constructor(public expressions: Array<Expression>) {
+export class FieldExpression extends Expression {
+  constructor(public field: string) {
     super()
-  }
-
-  negate(): Expression {
-    return this.group().negate()
-  }
-
-  toString() {
-    return this.expressions.join(' AND ')
-  }
-}
-
-export class Or extends CompositeExpression {
-  constructor(public expressions: Array<Expression>) {
-    super()
-  }
-
-  negate(): Expression {
-    return this.group().negate()
-  }
-
-  toString() {
-    return this.expressions.join(' OR ')
   }
 }
 
 type ComparisonOperator = '=' | '!=' | '>' | '>=' | '<' | '<='
+
 export class Comparison extends FieldExpression {
   constructor(
     field: string,
