@@ -104,7 +104,9 @@ export const filterBuilder = (...expressions: Array<Expression>) => {
 
 export const field = (field: string) => new Field(field)
 export const not = (expression: Expression) => new Not(expression)
-export const group = (expression: Expression) => new Group(expression)
+export const group = (expression: Expression, ...expressions: Array<Expression>) => {
+  return 0 === expressions.length ? new Group(expression) : new And([expression, ...expressions]).group()
+}
 
 export function withinGeoRadius(latitude: Latitude, longitude: Longitude, distanceInMeters: number): Expression {
   return new GeoRadius(latitude, longitude, distanceInMeters)

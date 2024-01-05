@@ -1,13 +1,13 @@
 var m = Object.defineProperty;
 var E = (n, t, e) => t in n ? m(n, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : n[t] = e;
 var i = (n, t, e) => (E(n, typeof t != "symbol" ? t + "" : t, e), e);
-const a = (n) => `'${`${n}`.replace(/[\\"']/g, "\\$&").replace(/\u0000/g, "\\0")}'`;
+const h = (n) => `'${`${n}`.replace(/[\\"']/g, "\\$&").replace(/\u0000/g, "\\0")}'`;
 class g extends Error {
   constructor(t, ...e) {
     super(...e), this.name = "UnhandledMatchError", this.message = `Unhandled match value of type ${typeof t} - ${t}`, Error.captureStackTrace(this, g);
   }
 }
-const d = Symbol(), x = (n, t) => {
+const d = Symbol(), $ = (n, t) => {
   const e = /* @__PURE__ */ new Map();
   for (const [...s] of t) {
     const T = s.pop();
@@ -18,16 +18,16 @@ const d = Symbol(), x = (n, t) => {
     throw new g(n);
   return e.get(n) ?? e.get(d);
 };
-x.default = d;
+$.default = d;
 class r {
   toString() {
     throw new Error("This method has to be implemented.");
   }
   and(t, ...e) {
-    return new c([this, t, ...e]);
+    return new u([this, t, ...e]);
   }
   or(t, ...e) {
-    return new $([this, t, ...e]);
+    return new x([this, t, ...e]);
   }
   negate() {
     return new N(this);
@@ -41,10 +41,10 @@ class B extends r {
     return "";
   }
   and(t, ...e) {
-    return e.length === 0 ? t : new c([t, ...e]);
+    return e.length === 0 ? t : new u([t, ...e]);
   }
   or(t, ...e) {
-    return e.length === 0 ? t : new $([t, ...e]);
+    return e.length === 0 ? t : new x([t, ...e]);
   }
   negate() {
     return this;
@@ -53,19 +53,19 @@ class B extends r {
     return this;
   }
 }
-class l extends r {
+class c extends r {
   constructor(e) {
     super();
     i(this, "expressions");
     this.expressions = e.map(
-      (s) => s instanceof l ? s.group() : s
+      (s) => s instanceof c ? s.group() : s
     );
   }
   negate() {
     return this.group().negate();
   }
 }
-class c extends l {
+class u extends c {
   constructor(t) {
     super(t);
   }
@@ -73,7 +73,7 @@ class c extends l {
     return this.expressions.join(" AND ");
   }
 }
-class $ extends l {
+class x extends c {
   constructor(t) {
     super(t);
   }
@@ -109,18 +109,18 @@ class N extends r {
     return `NOT ${this.expression}`;
   }
 }
-class u extends r {
+class a extends r {
   constructor(t) {
     super(), this.field = t;
   }
 }
-class o extends u {
+class o extends a {
   constructor(t, e, s = "=") {
     super(t), this.value = e, this.operator = s;
   }
   negate() {
     const t = new o(this.field, this.value);
-    return t.operator = x(this.operator, [
+    return t.operator = $(this.operator, [
       ["=", "!="],
       ["!=", "="],
       [">", "<="],
@@ -130,18 +130,18 @@ class o extends u {
     ]), t;
   }
   toString() {
-    return `${this.field} ${this.operator} ${a(this.value)}`;
+    return `${this.field} ${this.operator} ${h(this.value)}`;
   }
 }
-class y extends u {
+class y extends a {
   constructor(t, e, s) {
     super(t), this.left = e, this.right = s;
   }
   toString() {
-    return `${this.field} ${a(this.left)} TO ${a(this.right)}`;
+    return `${this.field} ${h(this.left)} TO ${h(this.right)}`;
   }
 }
-class p extends u {
+class p extends a {
   constructor(e) {
     super(e);
     i(this, "negated", !1);
@@ -154,21 +154,21 @@ class p extends u {
     return this.negated ? `${this.field} NOT EXISTS` : `${this.field} EXISTS`;
   }
 }
-class h extends u {
+class l extends a {
   constructor(e, s) {
     super(e);
     i(this, "negated", !1);
     this.type = s;
   }
   negate() {
-    const e = new h(this.field, this.type);
+    const e = new l(this.field, this.type);
     return e.negated = !this.negated, e;
   }
   toString() {
     return this.negated ? `${this.field} IS NOT ${this.type}` : `${this.field} IS ${this.type}`;
   }
 }
-class f extends u {
+class f extends a {
   constructor(e, s) {
     super(e);
     i(this, "negated", !1);
@@ -179,7 +179,7 @@ class f extends u {
     return e.negated = !this.negated, e;
   }
   toString() {
-    const e = this.values.map(a);
+    const e = this.values.map(h);
     return this.negated ? `${this.field} NOT IN [${e.join(", ")}]` : `${this.field} IN [${e.join(", ")}]`;
   }
 }
@@ -234,13 +234,13 @@ class L {
     return this.exists().negate();
   }
   isNull() {
-    return new h(this.field, "NULL");
+    return new l(this.field, "NULL");
   }
   isNotNull() {
     return this.isNull().negate();
   }
   isEmpty() {
-    return new h(this.field, "EMPTY");
+    return new l(this.field, "EMPTY");
   }
   isNotEmpty() {
     return this.isEmpty().negate();
@@ -252,13 +252,13 @@ class L {
     return this.isIn(t).negate();
   }
   hasAll(t) {
-    return new c(t.map((e) => this.equals(e)));
+    return new u(t.map((e) => this.equals(e)));
   }
   hasNone(t) {
     return this.hasAll(t).negate();
   }
 }
-const b = (...n) => n.length === 0 ? new B() : new c(n), j = (n) => new L(n), M = (n) => new N(n), q = (n) => new S(n);
+const b = (...n) => n.length === 0 ? new B() : new u(n), j = (n) => new L(n), M = (n) => new N(n), q = (n, ...t) => t.length === 0 ? new S(n) : new u([n, ...t]).group();
 function v(n, t, e) {
   return new G(n, t, e);
 }

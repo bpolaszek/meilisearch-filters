@@ -1,6 +1,7 @@
 import {
   field,
   filterBuilder,
+  group,
   notWithinGeoBoundingBox,
   notWithinGeoRadius,
   withinGeoBoundingBox,
@@ -230,5 +231,16 @@ describe('Empty expression', () => {
 
     expect(expression).toBeInstanceOf(And)
     expect(`${expression}`).toBe("foo = 'bar' AND fruit = 'banana' AND vegetable = 'potato'")
+  })
+})
+
+describe('Group expression', () => {
+  it('groups an expression', () => {
+    const expression = field('fruit').equals('banana').and(field('vegetable').equals('eggplant'))
+    expect(`${group(expression)}`).toBe("(fruit = 'banana' AND vegetable = 'eggplant')")
+  })
+  it('groups several expressions', () => {
+    const expressions = [field('fruit').equals('banana'), field('vegetable').equals('eggplant')]
+    expect(`${group(...expressions)}`).toBe("(fruit = 'banana' AND vegetable = 'eggplant')")
   })
 })
