@@ -15,8 +15,8 @@ import {
   Latitude,
   Longitude,
   Not,
-  And,
-} from './expression.ts'
+  And, MaybeExpression,
+} from './expression.ts';
 
 type Stringable = string | number | {toString(): string}
 
@@ -98,13 +98,13 @@ class Field {
   }
 }
 
-export const filterBuilder = (...expressions: Array<Expression>) => {
+export const filterBuilder = (...expressions: Array<MaybeExpression>) => {
   return 0 === expressions.length ? new EmptyExpression() : new And(expressions)
 }
 
 export const field = (field: string) => new Field(field)
-export const not = (expression: Expression) => new Not(expression)
-export const group = (expression: Expression, ...expressions: Array<Expression>) => {
+export const not = (expression: MaybeExpression) => new Not(expression)
+export const group = (expression: MaybeExpression, ...expressions: Array<MaybeExpression>) => {
   return 0 === expressions.length ? new Group(expression) : new And([expression, ...expressions]).group()
 }
 
