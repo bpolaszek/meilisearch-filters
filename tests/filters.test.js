@@ -249,5 +249,5 @@ describe('Literal expression', () => {
   it('creates a literal expression from a string', () => {
     const expression = field('fruit').equals('banana').and('vegetable = potato')
     expect(`${expression}`).toBe("fruit = 'banana' AND vegetable = potato")
-  });
-});
+  })
+})
