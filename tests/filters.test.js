@@ -244,3 +244,10 @@ describe('Group expression', () => {
     expect(`${group(...expressions)}`).toBe("(fruit = 'banana' AND vegetable = 'eggplant')")
   })
 })
+
+describe('Literal expression', () => {
+  it('creates a literal expression from a string', () => {
+    const expression = field('fruit').equals('banana').and('vegetable = potato')
+    expect(`${expression}`).toBe("fruit = 'banana' AND vegetable = potato")
+  })
+})

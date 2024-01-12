@@ -1,17 +1,27 @@
 import {escape} from './utils.ts'
 import match from 'match-operator'
 
+export type MaybeExpression = Expression | string
+
+const ensureExpression = (expression: MaybeExpression): Expression => {
+  return 'string' === typeof expression ? LiteralExpression.fromString(expression) : expression
+}
+
+const ensureExpressions = (expressions: Array<MaybeExpression>): Array<Expression> => {
+  return expressions.map(ensureExpression)
+}
+
 export class Expression {
   toString() {
     throw new Error('This method has to be implemented.')
   }
 
-  and(expression: Expression, ...expressions: Array<Expression>): Expression {
-    return new And([this, expression, ...expressions])
+  and(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression {
+    return new And(ensureExpressions([this, expression, ...expressions]))
   }
 
-  or(expression: Expression, ...expressions: Array<Expression>): Expression {
-    return new Or([this, expression, ...expressions])
+  or(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression {
+    return new Or(ensureExpressions([this, expression, ...expressions]))
   }
 
   negate(): Expression {
@@ -28,12 +38,12 @@ export class EmptyExpression extends Expression {
     return ''
   }
 
-  and(expression: Expression, ...expressions: Array<Expression>): Expression {
-    return 0 === expressions.length ? expression : new And([expression, ...expressions])
+  and(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression {
+    return 0 === expressions.length ? ensureExpression(expression) : new And([expression, ...expressions])
   }
 
-  or(expression: Expression, ...expressions: Array<Expression>): Expression {
-    return 0 === expressions.length ? expression : new Or([expression, ...expressions])
+  or(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression {
+    return 0 === expressions.length ? ensureExpression(expression) : new Or([expression, ...expressions])
   }
 
   negate(): Expression {
@@ -45,12 +55,26 @@ export class EmptyExpression extends Expression {
   }
 }
 
+class LiteralExpression extends Expression {
+  constructor(public expression: string) {
+    super()
+  }
+
+  toString() {
+    return this.expression
+  }
+
+  static fromString(expression: string): LiteralExpression | EmptyExpression {
+    return expression.length > 0 ? new LiteralExpression(expression) : new EmptyExpression()
+  }
+}
+
 export class CompositeExpression extends Expression {
   public expressions: Array<Expression>
 
-  constructor(expressions: Array<Expression>) {
+  constructor(expressions: Array<MaybeExpression>) {
     super()
-    this.expressions = expressions.map((expression) =>
+    this.expressions = ensureExpressions(expressions).map((expression) =>
       expression instanceof CompositeExpression ? expression.group() : expression
     )
   }
@@ -61,7 +85,7 @@ export class CompositeExpression extends Expression {
 }
 
 export class And extends CompositeExpression {
-  constructor(expressions: Array<Expression>) {
+  constructor(expressions: Array<MaybeExpression>) {
     super(expressions)
   }
 
@@ -71,7 +95,7 @@ export class And extends CompositeExpression {
 }
 
 export class Or extends CompositeExpression {
-  constructor(expressions: Array<Expression>) {
+  constructor(expressions: Array<MaybeExpression>) {
     super(expressions)
   }
 
@@ -81,8 +105,11 @@ export class Or extends CompositeExpression {
 }
 
 export class Group extends Expression {
-  constructor(public expression: Expression) {
+  public expression: Expression
+
+  constructor(expression: MaybeExpression) {
     super()
+    this.expression = ensureExpression(expression)
   }
 
   toString() {
@@ -95,15 +122,18 @@ export class Group extends Expression {
 }
 
 export class Not extends Expression {
-  constructor(public expression: Expression) {
+  public expression: Expression
+
+  constructor(expression: MaybeExpression) {
     super()
+    this.expression = ensureExpression(expression)
   }
 
-  and(expression: Expression, ...expressions: Array<Expression>): Expression {
+  and(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression {
     return this.group().and(expression, ...expressions)
   }
 
-  or(expression: Expression, ...expressions: Array<Expression>): Expression {
+  or(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression {
     return this.group().or(expression, ...expressions)
   }
 

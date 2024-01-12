@@ -1,41 +1,42 @@
+export type MaybeExpression = Expression | string;
 export declare class Expression {
     toString(): void;
-    and(expression: Expression, ...expressions: Array<Expression>): Expression;
-    or(expression: Expression, ...expressions: Array<Expression>): Expression;
+    and(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression;
+    or(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression;
     negate(): Expression;
     group(): Expression;
 }
 export declare class EmptyExpression extends Expression {
     toString(): string;
-    and(expression: Expression, ...expressions: Array<Expression>): Expression;
-    or(expression: Expression, ...expressions: Array<Expression>): Expression;
+    and(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression;
+    or(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression;
     negate(): Expression;
     group(): Expression;
 }
 export declare class CompositeExpression extends Expression {
     expressions: Array<Expression>;
-    constructor(expressions: Array<Expression>);
+    constructor(expressions: Array<MaybeExpression>);
     negate(): Expression;
 }
 export declare class And extends CompositeExpression {
-    constructor(expressions: Array<Expression>);
+    constructor(expressions: Array<MaybeExpression>);
     toString(): string;
 }
 export declare class Or extends CompositeExpression {
-    constructor(expressions: Array<Expression>);
+    constructor(expressions: Array<MaybeExpression>);
     toString(): string;
 }
 export declare class Group extends Expression {
     expression: Expression;
-    constructor(expression: Expression);
+    constructor(expression: MaybeExpression);
     toString(): string;
     group(): Group;
 }
 export declare class Not extends Expression {
     expression: Expression;
-    constructor(expression: Expression);
-    and(expression: Expression, ...expressions: Array<Expression>): Expression;
-    or(expression: Expression, ...expressions: Array<Expression>): Expression;
+    constructor(expression: MaybeExpression);
+    and(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression;
+    or(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression;
     negate(): Expression;
     toString(): string;
 }
