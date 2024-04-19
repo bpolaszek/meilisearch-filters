@@ -5,6 +5,7 @@ export declare class Expression {
     or(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression;
     negate(): Expression;
     group(): Expression;
+    static create(...expressions: Array<MaybeExpression>): Expression;
 }
 export declare class EmptyExpression extends Expression {
     toString(): string;

@@ -100,7 +100,7 @@ class Field {
 }
 
 export const filterBuilder = (...expressions: Array<MaybeExpression>) => {
-  return 0 === expressions.length ? new EmptyExpression() : new And(expressions)
+  return Expression.create(...expressions)
 }
 
 export const field = (field: string) => new Field(field)
@@ -125,4 +125,4 @@ export function notWithinGeoBoundingBox(topLeftCorner: Coordinates, bottomRightC
   return withinGeoBoundingBox(topLeftCorner, bottomRightCorner).negate()
 }
 
-export type {Expression, FieldExpression, CompositeExpression, Field}
+export type {Expression, EmptyExpression, FieldExpression, CompositeExpression, Field}

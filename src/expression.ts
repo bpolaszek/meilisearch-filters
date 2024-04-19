@@ -11,17 +11,23 @@ const ensureExpressions = (expressions: Array<MaybeExpression>): Array<Expressio
   return expressions.map(ensureExpression)
 }
 
+const avoidEmptyExpressions = (expressions: Array<Expression>): Array<Expression> => {
+  return expressions.filter((expression) => !(expression instanceof EmptyExpression))
+}
+
 export class Expression {
   toString() {
     throw new Error('This method has to be implemented.')
   }
 
   and(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression {
-    return new And(ensureExpressions([this, expression, ...expressions]))
+    expressions = avoidEmptyExpressions(ensureExpressions([this, expression, ...expressions]))
+    return expressions.length > 0 ? new And(expressions) : this
   }
 
   or(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression {
-    return new Or(ensureExpressions([this, expression, ...expressions]))
+    expressions = avoidEmptyExpressions(ensureExpressions([this, expression, ...expressions]))
+    return expressions.length > 0 ? new Or(expressions) : this
   }
 
   negate(): Expression {
@@ -31,6 +37,18 @@ export class Expression {
   group(): Expression {
     return new Group(this)
   }
+
+  static create(...expressions: Array<MaybeExpression>): Expression {
+    expressions = avoidEmptyExpressions(ensureExpressions(expressions))
+    if (0 === expressions.length) {
+      return new EmptyExpression()
+    }
+
+    const expression = expressions.shift() as Expression
+
+    // @ts-ignore
+    return expressions.length > 0 ? expression.and(...expressions) : expression
+  }
 }
 
 export class EmptyExpression extends Expression {
@@ -39,11 +57,11 @@ export class EmptyExpression extends Expression {
   }
 
   and(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression {
-    return 0 === expressions.length ? ensureExpression(expression) : new And([expression, ...expressions])
+    return 0 === expressions.length ? ensureExpression(expression) : super.and(expression, ...expressions)
   }
 
   or(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression {
-    return 0 === expressions.length ? ensureExpression(expression) : new Or([expression, ...expressions])
+    return 0 === expressions.length ? ensureExpression(expression) : super.or(expression, ...expressions)
   }
 
   negate(): Expression {
