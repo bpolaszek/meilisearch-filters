@@ -225,12 +225,13 @@ describe('Empty expression', () => {
   it('can be built with several filters', () => {
     const expression = filterBuilder(
       field('foo').equals('bar'),
+      new EmptyExpression(),
       field('fruit').equals('banana'),
       field('vegetable').equals('potato')
-    )
+    ).and(new EmptyExpression())
 
     expect(expression).toBeInstanceOf(And)
-    expect(`${expression}`).toBe("foo = 'bar' AND fruit = 'banana' AND vegetable = 'potato'")
+    expect(`${expression}`).toBe("(foo = 'bar' AND fruit = 'banana' AND vegetable = 'potato')")
   })
 })
 

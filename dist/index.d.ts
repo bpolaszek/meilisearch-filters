@@ -1,4 +1,4 @@
-import { Coordinates, EmptyExpression, Expression, FieldExpression, CompositeExpression, Latitude, Longitude, Not, And, MaybeExpression } from './expression.ts';
+import { Coordinates, EmptyExpression, Expression, FieldExpression, CompositeExpression, Latitude, Longitude, Not, MaybeExpression } from './expression.ts';
 type Stringable = string | number | {
     toString(): string;
 };
@@ -24,7 +24,7 @@ declare class Field {
     hasAll(values: Array<Stringable>): Expression;
     hasNone(values: Array<Stringable>): Expression;
 }
-export declare const filterBuilder: (...expressions: Array<MaybeExpression>) => And | EmptyExpression;
+export declare const filterBuilder: (...expressions: Array<MaybeExpression>) => Expression;
 export declare const field: (field: string) => Field;
 export declare const not: (expression: MaybeExpression) => Not;
 export declare const group: (expression: MaybeExpression, ...expressions: Array<MaybeExpression>) => Expression;
@@ -32,4 +32,4 @@ export declare function withinGeoRadius(latitude: Latitude, longitude: Longitude
 export declare function notWithinGeoRadius(latitude: Latitude, longitude: Longitude, distanceInMeters: number): Expression;
 export declare function withinGeoBoundingBox(topLeftCorner: Coordinates, bottomRightCorner: Coordinates): Expression;
 export declare function notWithinGeoBoundingBox(topLeftCorner: Coordinates, bottomRightCorner: Coordinates): Expression;
-export type { Expression, FieldExpression, CompositeExpression, Field };
+export type { Expression, EmptyExpression, FieldExpression, CompositeExpression, Field };
