@@ -1,15 +1,39 @@
+[![npm version](https://badge.fury.io/js/meilisearch-filters.svg)](https://badge.fury.io/js/meilisearch-filters)
 [![CI Workflow](https://github.com/bpolaszek/meilisearch-filters/actions/workflows/ci.yml/badge.svg)](https://github.com/bpolaszek/meilisearch-filters/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-# MeiliSearch Filter Builder
 
-This library allows you to build [Meilisearch filters](https://www.meilisearch.com/docs/learn/fine_tuning_results/filtering#filter-basics) using Javascript.
+# MeiliSearch Filters
+
+This library allows you to build [Meilisearch filters](https://www.meilisearch.com/docs/learn/fine_tuning_results/filtering#filter-basics) in your Javascript/Typescript projects,
+using a simple and fluent interface.
 
 Examples:
 
+```js
+import { field } from 'meilisearch-filters'
+
+const filter = field('first_name').equals("Donald")
+  .and(field('hair_color').isIn(['blond', 'orange']))
+  .and(field('password').notEquals('covfefe'))
+  .and(field('brain').isNull())
+
+console.log(filter.toString()) // first_name = 'Donald' AND hair_color IN ['blond', 'orange'] AND password != 'covfefe' AND brain IS NULL
+```
+
+## Installation
+
+```
+npm install meilisearch-filters --save # If you're using NPM
+yarn add meilisearch-filters # If you're using Yarn
+```
+
+
+## Usage
 ### Comparison Filters
 
 ```js
-import {field} from 'meilisearch-filters'
+import { field } from 'meilisearch-filters'
 
 `${field('cat').equals("Berlioz")}` // cat = 'Berlioz'
 `${field('cat').notEquals("O'Malley")}` // cat != 'O\\'Malley'
@@ -26,7 +50,7 @@ import {field} from 'meilisearch-filters'
 ### Between Filter
 
 ```js
-import {field} from 'meilisearch-filters'
+import { field } from 'meilisearch-filters'
 
 `${field('age').isBetween(5, 10)}` // age '5' TO '10'
 `${field('age').isNotBetween(5, 10)}` // NOT age '5' TO '10'
@@ -37,7 +61,7 @@ import {field} from 'meilisearch-filters'
 ### Exists Filter
 
 ```js
-import {field} from 'meilisearch-filters'
+import { field } from 'meilisearch-filters'
 
 `${field('god').exists()}` // god EXISTS
 `${field('god').doesNotExist()}` // god NOT EXISTS
@@ -46,7 +70,7 @@ import {field} from 'meilisearch-filters'
 ### Empty Filter
 
 ```js
-import {field} from 'meilisearch-filters'
+import { field } from 'meilisearch-filters'
 
 `${field('glass').isEmpty()}` // glass IS EMPTY
 `${field('glass').isNotEmpty()}` // glass IS NOT EMPTY
@@ -55,7 +79,7 @@ import {field} from 'meilisearch-filters'
 ### Null Filter
 
 ```js
-import {field} from 'meilisearch-filters'
+import { field } from 'meilisearch-filters'
 
 `${field('nullish').isNull()}` // nullish IS NULL
 `${field('nullish').isNotNull()}` // nullish IS NOT NULL
@@ -64,7 +88,7 @@ import {field} from 'meilisearch-filters'
 ### IN Filter
 
 ```js
-import {field} from 'meilisearch-filters'
+import { field } from 'meilisearch-filters'
 
 const cat = field('cat')
 `${cat.isIn(['Berlioz', "O'Malley"])}` // cat IN ['Berlioz', 'O\\'Malley']
@@ -74,14 +98,14 @@ const cat = field('cat')
 ### Geographic filters
 
 ```js
-import {withinGeoRadius, notWithinGeoRadius} from 'meilisearch-filters'
+import { withinGeoRadius, notWithinGeoRadius } from 'meilisearch-filters'
 
 `${withinGeoRadius(50.35, 3.51, 3000)}` // _geoRadius(50.35, 3.51, 3000)
 `${notWithinGeoRadius(50.35, 3.51, 3000)}` // NOT _geoRadius(50.35, 3.51, 3000)
 ```
 
 ```js
-import {withinGeoBoundingBox, notWithinGeoBoundingBox} from 'meilisearch-filters'
+import { withinGeoBoundingBox, notWithinGeoBoundingBox } from 'meilisearch-filters'
 
 `${withinGeoBoundingBox([50.55, 3], [50.52, 3.08])}` // _geoBoundingBox([50.55, 3], [50.52, 3.08])
 `${notWithinGeoBoundingBox([50.55, 3], [50.52, 3.08])}` // NOT _geoBoundingBox([50.55, 3], [50.52, 3.08])
@@ -90,7 +114,7 @@ import {withinGeoBoundingBox, notWithinGeoBoundingBox} from 'meilisearch-filters
 ### Composite filters
 
 ```js
-import {field} from 'meilisearch-filters'
+import { field } from 'meilisearch-filters'
 
 const cat = field('cat')
 const color = field('color')
@@ -105,7 +129,7 @@ const age = field('age')
 ### NOT filter
 
 ```js
-import {field, not} from 'meilisearch-filters'
+import { field, not } from 'meilisearch-filters'
 
 const color = field('ginger')
 `${not(color.equals('ginger'))}` // NOT color = 'ginger' 
@@ -114,7 +138,7 @@ const color = field('ginger')
 ### Adding parentheses
 
 ```js
-import {field, group} from 'meilisearch-filters'
+import { field, group } from 'meilisearch-filters'
 
 const color = field('ginger')
 `${group(color.equals('ginger'))}` // (color = 'ginger') 
@@ -125,7 +149,7 @@ const color = field('ginger')
 #### Without any filter
 
 ```js
-import {filterBuilder} from 'meilisearch-filters'
+import { filterBuilder } from 'meilisearch-filters'
 
 let filters = filterBuilder()
 `${filters}` // ''
@@ -136,7 +160,7 @@ filters = filters.and(field('foo').equals('bar'))
 #### With existing filters
 
 ```js
-import {filterBuilder} from 'meilisearch-filters'
+import { filterBuilder } from 'meilisearch-filters'
 
 let filters = filterBuilder(
   field('foo').equals('bar'), 
@@ -146,20 +170,14 @@ let filters = filterBuilder(
 `${filters}` // foo = 'bar' AND fruit = 'banana' AND vegetable = 'POTATO'
 ```
 
-# Installation
 
-```
-npm install meilisearch-filters --save # If you're using NPM
-yarn add meilisearch-filters # If you're using Yarn
-```
-
-# Tests
+## Tests
 
 ```
 npm run test # If you're using NPM
 yarn test # If you're using Yarn
 ```
 
-# License
+## License
 
 MIT.
