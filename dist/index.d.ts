@@ -32,4 +32,4 @@ export declare function withinGeoRadius(latitude: Latitude, longitude: Longitude
 export declare function notWithinGeoRadius(latitude: Latitude, longitude: Longitude, distanceInMeters: number): Expression;
 export declare function withinGeoBoundingBox(topLeftCorner: Coordinates, bottomRightCorner: Coordinates): Expression;
 export declare function notWithinGeoBoundingBox(topLeftCorner: Coordinates, bottomRightCorner: Coordinates): Expression;
-export type { Expression, EmptyExpression, FieldExpression, CompositeExpression, Field };
+export { Expression, EmptyExpression, FieldExpression, CompositeExpression, Field };

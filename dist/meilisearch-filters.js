@@ -294,6 +294,11 @@ function X(n, t) {
   return M(n, t).negate();
 }
 export {
+  d as CompositeExpression,
+  w as EmptyExpression,
+  s as Expression,
+  b as Field,
+  a as FieldExpression,
   C as field,
   A as filterBuilder,
   F as group,

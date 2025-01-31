@@ -125,4 +125,4 @@ export function notWithinGeoBoundingBox(topLeftCorner: Coordinates, bottomRightC
   return withinGeoBoundingBox(topLeftCorner, bottomRightCorner).negate()
 }
 
-export type {Expression, EmptyExpression, FieldExpression, CompositeExpression, Field}
+export {Expression, EmptyExpression, FieldExpression, CompositeExpression, Field}
