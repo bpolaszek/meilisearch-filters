@@ -1,7 +1,7 @@
 {
   "name": "meilisearch-filters",
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Expression builder for Meilisearch filters.",
   "author": "Beno!t POLASZEK",
   "license": "MIT",
