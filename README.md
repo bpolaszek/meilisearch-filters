@@ -95,6 +95,24 @@ const cat = field('cat')
 `${cat.isNotIn(['Berlioz', "O'Malley"])}` // cat NOT IN ['Berlioz', 'O\\'Malley']
 ```
 
+### CONTAINS filter
+
+```js
+import { field } from 'meilisearch-filters'
+
+`${field('cat').contains('Berlioz')}` // cat CONTAINS 'Berlioz'
+`${field('cat').doesNotContain('Berlioz')}` // cat NOT CONTAINS 'Berlioz'
+```
+
+### STARTS WITH filter
+
+```js
+import { field } from 'meilisearch-filters'
+
+`${field('cat').startsWith('Ber')}` // cat STARTS WITH 'Ber'
+`${field('cat').doesNotStartWith('Ber')}` // cat NOT STARTS WITH 'Ber'
+```
+
 ### Geographic filters
 
 ```js
