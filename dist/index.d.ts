@@ -1,7 +1,4 @@
-import { Coordinates, EmptyExpression, Expression, FieldExpression, CompositeExpression, Latitude, Longitude, Not, MaybeExpression } from './expression.ts';
-type Stringable = string | number | {
-    toString(): string;
-};
+import { Coordinates, EmptyExpression, Expression, FieldExpression, CompositeExpression, Latitude, Longitude, Not, MaybeExpression, type Stringable } from './expression.ts';
 declare class Field {
     private field;
     constructor(field: string);
@@ -23,6 +20,10 @@ declare class Field {
     isNotIn(values: Array<Stringable>): Expression;
     hasAll(values: Array<Stringable>): Expression;
     hasNone(values: Array<Stringable>): Expression;
+    contains(value: Stringable): Expression;
+    doesNotContain(value: Stringable): Expression;
+    startsWith(value: Stringable): Expression;
+    doesNotStartWith(value: Stringable): Expression;
 }
 export declare const filterBuilder: (...expressions: Array<MaybeExpression>) => Expression;
 export declare const field: (field: string) => Field;

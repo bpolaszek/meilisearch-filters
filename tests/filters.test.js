@@ -159,6 +159,30 @@ describe('hasAll / hasNone filter', () => {
   })
 })
 
+describe('CONTAINS Filter', () => {
+  it('stringifies the filter', () => {
+    const expression = field('cat').contains('Berlioz')
+    expect(`${expression}`).toEqual(`cat CONTAINS 'Berlioz'`)
+  })
+
+  it('stringifies the negated filter', () => {
+    const expression = field('cat').doesNotContain('Berlioz')
+    expect(`${expression}`).toEqual(`cat NOT CONTAINS 'Berlioz'`)
+  })
+})
+
+describe('STARTS WITH Filter', () => {
+  it('stringifies the filter', () => {
+    const expression = field('cat').startsWith('Berlioz')
+    expect(`${expression}`).toEqual(`cat STARTS WITH 'Berlioz'`)
+  })
+
+  it('stringifies the negated filter', () => {
+    const expression = field('cat').doesNotStartWith('Berlioz')
+    expect(`${expression}`).toEqual(`cat NOT STARTS WITH 'Berlioz'`)
+  })
+})
+
 describe('OR filter', () => {
   const cat = field('cat')
   const expression = cat.equals('Berlioz').or(cat.equals("O'Malley"))

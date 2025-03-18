@@ -1,4 +1,7 @@
 export type MaybeExpression = Expression | string;
+export type Stringable = string | number | boolean | {
+    toString(): string;
+};
 export declare class Expression {
     toString(): void;
     and(expression: MaybeExpression, ...expressions: Array<MaybeExpression>): Expression;
@@ -47,16 +50,16 @@ export declare class FieldExpression extends Expression {
 }
 type ComparisonOperator = '=' | '!=' | '>' | '>=' | '<' | '<=';
 export declare class Comparison extends FieldExpression {
-    value: any;
+    value: Stringable;
     operator: ComparisonOperator;
-    constructor(field: string, value: any, operator?: ComparisonOperator);
+    constructor(field: string, value: Stringable, operator?: ComparisonOperator);
     negate(): Expression;
     toString(): string;
 }
 export declare class Between extends FieldExpression {
-    left: any;
-    right: any;
-    constructor(field: string, left: any, right: any);
+    left: Stringable;
+    right: Stringable;
+    constructor(field: string, left: Stringable, right: Stringable);
     toString(): string;
 }
 export declare class Exists extends FieldExpression {
@@ -74,9 +77,23 @@ export declare class Is extends FieldExpression {
     toString(): string;
 }
 export declare class In extends FieldExpression {
-    values: Array<any>;
+    values: Stringable[];
     private negated;
-    constructor(field: string, values: Array<any>);
+    constructor(field: string, values: Stringable[]);
+    negate(): Expression;
+    toString(): string;
+}
+export declare class Contains extends FieldExpression {
+    value: Stringable;
+    private negated;
+    constructor(field: string, value: Stringable);
+    negate(): Expression;
+    toString(): string;
+}
+export declare class StartsWith extends FieldExpression {
+    value: Stringable;
+    private negated;
+    constructor(field: string, value: Stringable);
     negate(): Expression;
     toString(): string;
 }

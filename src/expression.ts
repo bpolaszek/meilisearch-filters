@@ -2,6 +2,7 @@ import {escape} from './utils.ts'
 import match from 'match-operator'
 
 export type MaybeExpression = Expression | string
+export type Stringable = string | number | boolean | {toString(): string}
 
 const ensureExpression = (expression: MaybeExpression): Expression => {
   return 'string' === typeof expression ? LiteralExpression.fromString(expression) : expression
@@ -175,7 +176,7 @@ type ComparisonOperator = '=' | '!=' | '>' | '>=' | '<' | '<='
 export class Comparison extends FieldExpression {
   constructor(
     field: string,
-    public value: any,
+    public value: Stringable,
     public operator: ComparisonOperator = '='
   ) {
     super(field)
@@ -202,8 +203,8 @@ export class Comparison extends FieldExpression {
 export class Between extends FieldExpression {
   constructor(
     field: string,
-    public left: any,
-    public right: any
+    public left: Stringable,
+    public right: Stringable
   ) {
     super(field)
   }
@@ -259,7 +260,7 @@ export class In extends FieldExpression {
 
   constructor(
     field: string,
-    public values: Array<any>
+    public values: Stringable[]
   ) {
     super(field)
   }
@@ -275,6 +276,52 @@ export class In extends FieldExpression {
     return this.negated
       ? `${this.field} NOT IN [${escapedValues.join(', ')}]`
       : `${this.field} IN [${escapedValues.join(', ')}]`
+  }
+}
+
+export class Contains extends FieldExpression {
+  private negated: boolean = false
+
+  constructor(
+    field: string,
+    public value: Stringable
+  ) {
+    super(field)
+  }
+
+  negate(): Expression {
+    const clone = new Contains(this.field, this.value)
+    clone.negated = !this.negated
+    return clone
+  }
+
+  toString() {
+    return this.negated
+      ? `${this.field} NOT CONTAINS ${escape(this.value)}`
+      : `${this.field} CONTAINS ${escape(this.value)}`
+  }
+}
+
+export class StartsWith extends FieldExpression {
+  private negated: boolean = false
+
+  constructor(
+    field: string,
+    public value: Stringable
+  ) {
+    super(field)
+  }
+
+  negate(): Expression {
+    const clone = new StartsWith(this.field, this.value)
+    clone.negated = !this.negated
+    return clone
+  }
+
+  toString() {
+    return this.negated
+      ? `${this.field} NOT STARTS WITH ${escape(this.value)}`
+      : `${this.field} STARTS WITH ${escape(this.value)}`
   }
 }
 
