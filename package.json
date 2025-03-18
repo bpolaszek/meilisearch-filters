@@ -34,7 +34,7 @@
     "match-operator": "^0.2.1",
     "prettier": "^3.0.0",
     "typescript": "^5.0.2",
-    "vite": "^5.2.9",
+    "vite": "^6.2.2",
     "vite-plugin-dts": "^3.3.1",
     "vitest": "^0.33.0"
   },
@@ -43,9 +43,9 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/meilisearch-filters.js",
-      "require": "./dist/meilisearch-filters.umd.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/meilisearch-filters.umd.cjs"
     }
   },
   "files": [

@@ -1,6 +1,6 @@
 var G = Object.defineProperty;
 var O = (n, t, e) => t in n ? G(n, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : n[t] = e;
-var r = (n, t, e) => (O(n, typeof t != "symbol" ? t + "" : t, e), e);
+var r = (n, t, e) => O(n, typeof t != "symbol" ? t + "" : t, e);
 const o = (n) => `'${`${n}`.replace(/[\\"']/g, "\\$&").replace(/\u0000/g, "\\0")}'`;
 class p extends Error {
   constructor(t, ...e) {
