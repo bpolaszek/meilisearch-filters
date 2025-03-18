@@ -17,9 +17,10 @@ import {
   Not,
   And,
   MaybeExpression,
+  Contains,
+  type Stringable,
+  StartsWith,
 } from './expression.ts'
-
-type Stringable = string | number | {toString(): string}
 
 class Field {
   constructor(private field: string) {}
@@ -96,6 +97,22 @@ class Field {
 
   hasNone(values: Array<Stringable>): Expression {
     return this.hasAll(values).negate()
+  }
+
+  contains(value: Stringable): Expression {
+    return new Contains(this.field, value)
+  }
+
+  doesNotContain(value: Stringable): Expression {
+    return this.contains(value).negate()
+  }
+
+  startsWith(value: Stringable): Expression {
+    return new StartsWith(this.field, value)
+  }
+
+  doesNotStartWith(value: Stringable): Expression {
+    return this.startsWith(value).negate()
   }
 }
 
